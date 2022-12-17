@@ -4,18 +4,16 @@
 
 TaskManager tm(MAX_TASKS);
 
-void print1() {
-    Serial.println("3000");
-}
-
-void print2() {
-    Serial.println("3000");
-}
-
 void setup() {
     Serial.begin(115200);
-    tm.addTask(print1, 3000);
-    tm.addTask(print2, 5000);
+
+    tm.addTask(3000, [](){
+        Serial.println("3000");
+    });
+
+    tm.addTask(5000, [](){
+        Serial.println("5000");
+    });
 }
 
 void loop() {

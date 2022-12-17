@@ -8,11 +8,13 @@ class TaskManager {
     TaskManager(uint8_t maxTasks) : tasks(new Task[maxTasks]) { this->maxTasks = maxTasks; }
     ~TaskManager() { delete[] tasks; }
 
+    typedef void (*TaskFunc)();
+
     // add a task that will run indefinitely
-    uint8_t addTask(uint32_t interval, void (*func)());
+    uint8_t addTask(uint32_t interval, TaskFunc func);
 
     // add a task that will run for a specified number of times
-    uint8_t addTask(uint32_t interval, uint16_t times, void (*func)());
+    uint8_t addTask(uint32_t interval, uint16_t times, TaskFunc func);
 
     // remove a task from the array of tasks
     void removeTask(uint8_t taskId);
@@ -24,7 +26,7 @@ class TaskManager {
     // this struct holds a function, its associated interval, and the number of times it should run
     struct Task {
       uint8_t taskId;
-      void (*func)();
+      TaskFunc func;
       uint32_t interval;
       uint32_t previousMillis;
       uint16_t times;

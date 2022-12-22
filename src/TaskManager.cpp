@@ -2,13 +2,13 @@
 
 uint8_t TaskManager::addTask(uint32_t interval, void (*func)()) {
   // make sure the array of tasks is not full
-  if (this->taskCount < this->maxTasks) {
+  if (taskCount < maxTasks) {
     // create a new Task and add it to the array of tasks
-    this->tasks[this->taskCount] = {this->taskCount, func, interval, millis(), 0, true};
-    this->taskCount++;
+    tasks[taskCount] = {taskCount, func, interval, millis(), 0, true};
+    taskCount++;
 
     // return the task's unique identifier
-    return this->taskCount - 1;
+    return taskCount - 1;
   }
 
   // return an error value if the array of tasks is full
@@ -17,13 +17,13 @@ uint8_t TaskManager::addTask(uint32_t interval, void (*func)()) {
 
 uint8_t TaskManager::addTask(uint32_t interval, uint16_t times, void (*func)()) {
   // make sure the array of tasks is not full
-  if (this->taskCount < this->maxTasks) {
+  if (taskCount < maxTasks) {
     // create a new Task and add it to the array of tasks
-    this->tasks[this->taskCount] = {this->taskCount, func, interval, millis(), times, false};
-    this->taskCount++;
+    tasks[taskCount] = {taskCount, func, interval, millis(), times, false};
+    taskCount++;
 
     // return the task's unique identifier
-    return this->taskCount - 1;
+    return taskCount - 1;
   }
 
   // return an error value if the array of tasks is full
@@ -32,19 +32,19 @@ uint8_t TaskManager::addTask(uint32_t interval, uint16_t times, void (*func)()) 
 
 void TaskManager::removeTask(uint8_t index) {
   // iterate over all the remaining tasks in the array
-  for (int i = index; i < this->taskCount - 1; i++) {
+  for (int i = index; i < taskCount - 1; i++) {
     // move the next task in the array to the current position
-    this->tasks[i] = tasks[i + 1];
+    tasks[i] = tasks[i + 1];
   }
 
   // decrement the task count to account for the removed task
-  this->taskCount--;
+  taskCount--;
 }
 
 void TaskManager::update() {
   // iterate over all the tasks in the array
-  for (int i = 0; i < this->taskCount; i++) {
-    Task& task = this->tasks[i];
+  for (int i = 0; i < taskCount; i++) {
+    Task& task = tasks[i];
 
     // if the task's interval has passed since the last time this code was executed
     if (millis() > task.previousMillis + task.interval) {
@@ -61,7 +61,7 @@ void TaskManager::update() {
 
         // if the task has run the specified number of times, remove it from the array of tasks
         if (task.times == 0) {
-          this->removeTask(i);
+          removeTask(i);
         }
       }
     }

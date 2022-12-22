@@ -3,12 +3,12 @@
 
 #include <Arduino.h>
 
+typedef void (*TaskFunc)();
+
 class TaskManager {
   public:
     TaskManager(uint8_t maxTasks) : tasks(new Task[maxTasks]) { this->maxTasks = maxTasks; }
     ~TaskManager() { delete[] tasks; }
-
-    typedef void (*TaskFunc)();
 
     // add a task that will run indefinitely
     uint8_t addTask(uint32_t interval, TaskFunc func);

@@ -1,25 +1,28 @@
 #include "TaskManager.h" // include the TaskManager class
 
+#define MAX_TASKS 2
 const int LED_PIN = LED_BUILTIN; // the pin for the on-board LED
 
-TaskManager tm(2); // create a new TaskManager object
+TaskManager tm(MAX_TASKS); // create a new TaskManager object
+bool isLedOn = false;
 
-void ledOn() {
+void ledTask() {
+  if(isLedOn) {
+    digitalWrite(LED_PIN, LOW); // turn the LED off
+    isLedOn = false;
+    return;
+  }
+
   digitalWrite(LED_PIN, HIGH); // turn the LED on
-}
-
-void ledOff() {
-  digitalWrite(LED_PIN, LOW); // turn the LED off
+  isLedOn = true;
+  return;
 }
 
 void setup() {
   pinMode(LED_PIN, OUTPUT); // set the LED pin as an output
 
-  // add the ledOn() function to the TaskManager with a 500ms interval
-  int ledOnTaskId = tm.addTask(ledOn, 500);
-
-  // add the ledOff() function to the TaskManager with a 1000ms interval
-  int ledOffTaskId = tm.addTask(ledOff, 1000);
+  // add the ledTask function to the TaskManager with a 1000ms interval
+  int ledOnTaskId = tm.addTask(1000, ledTask);
 }
 
 void loop() {
